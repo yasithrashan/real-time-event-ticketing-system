@@ -1,7 +1,5 @@
 package com.example.backend.TicketingConfiguration;
 
-
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +16,8 @@ public class ConfigurationController {
 
         // Check Validation
         if (ticketingSystemConfiguration == null) {
-            ticketingSystemConfiguration = new TicketingSystemConfiguration(); // Default Configuration
+            ticketingSystemConfiguration = TicketingSystemConfiguration.getInstance(); // Default Configuration
+
         }
     }
 
@@ -33,6 +32,13 @@ public class ConfigurationController {
 
         this.ticketingSystemConfiguration = newConfiguration;
         ConfigurationFileHandler.saveConfiguration(newConfiguration);
+
+        // Print the configuration parameters to the terminal
+        System.out.println("Configuration updated:");
+        System.out.println("Total Tickets: " + newConfiguration.getTotalTickets());
+        System.out.println("Ticket Release Rate: " + newConfiguration.getTicketReleaseRate());
+        System.out.println("Customer Retrieval Rate: " + newConfiguration.getCustomerRetrievalRate());
+        System.out.println("Max Ticket Capacity: " + newConfiguration.getMaxTicketCapacity());
 
 
         return ResponseEntity.ok("Configuration successfully updated!");
