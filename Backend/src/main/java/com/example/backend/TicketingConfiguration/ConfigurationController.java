@@ -48,4 +48,5 @@ public class ConfigurationController {
     public ResponseEntity<TicketingSystemConfiguration> getConfig() {
         return ResponseEntity.ok(ticketingSystemConfiguration);
     }
+
 }
