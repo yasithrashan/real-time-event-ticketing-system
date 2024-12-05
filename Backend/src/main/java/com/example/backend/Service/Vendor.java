@@ -3,27 +3,27 @@ package com.example.backend.Service;
 public class Vendor implements Runnable {
 
     private final TicketPool ticketPool;
-    private final int vendorId;
+    private final Long vendorID;
+    private final int ticketReleaseRate; // Tickets added per second
 
-    public Vendor(TicketPool ticketPool, int vendorId) {
+    // Constructor
+    public Vendor(Long vendorID, TicketPool ticketPool, int ticketReleaseRate) {
+        this.vendorID = vendorID;
         this.ticketPool = ticketPool;
-        this.vendorId = vendorId;
+        this.ticketReleaseRate = ticketReleaseRate; // Dynamically passed
     }
 
     @Override
     public void run() {
-
         while (true) {
             try {
-                ticketPool.addTicket(vendorId);
-                Thread.sleep(1000/ticketPool.config.getTicketReleaseRate());
-
+                ticketPool.addTicket(vendorID); // Add one ticket to the pool
+                Thread.sleep(1000 / ticketReleaseRate); // Wait based on ticket release rate
             } catch (InterruptedException e) {
-                System.out.println("Vendor : "+vendorId + " thread interrupted");
                 Thread.currentThread().interrupt();
-                return;
+                System.out.println("Vendor " + vendorID + " interrupted.");
+                break;
             }
         }
-
     }
 }
