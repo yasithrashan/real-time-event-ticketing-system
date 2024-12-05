@@ -1,6 +1,7 @@
 package com.example.backend.TicketingConfiguration;
 
 import com.example.backend.Service.TicketingService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,17 +25,17 @@ public class ConfigurationController {
 
     // API to update configuration
     @PostMapping
-    public ResponseEntity<String> postConfiguration(@RequestBody TicketingSystemConfiguration newConfiguration) {
+    public ResponseEntity<String> postConfiguration(@Valid @RequestBody TicketingSystemConfiguration newConfiguration) {
         if (newConfiguration.getMaxTicketCapacity() < newConfiguration.getTotalTickets()) {
             return ResponseEntity.badRequest().body("Max ticket capacity cannot be less than total tickets!");
         }
 
-        if (newConfiguration.getMaxTicketCapacity() < 1 ||
-                newConfiguration.getTotalTickets() < 1 ||
-                newConfiguration.getTicketReleaseRate() < 1 ||
-                newConfiguration.getCustomerRetrievalRate() < 1) {
-            return ResponseEntity.badRequest().body("All configuration values must be greater than 0!");
-        }
+//        if (newConfiguration.getMaxTicketCapacity() < 1 ||
+//                newConfiguration.getTotalTickets() < 1 ||
+//                newConfiguration.getTicketReleaseRate() < 1 ||
+//                newConfiguration.getCustomerRetrievalRate() < 1) {
+//            return ResponseEntity.badRequest().body("All configuration values must be greater than 0!");
+//        }
 
         // Save to Files
         this.ticketingSystemConfiguration = newConfiguration;

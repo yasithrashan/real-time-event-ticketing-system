@@ -19,7 +19,7 @@ public class TicketPool {
     }
 
     // Add a ticket to the pool (Vendor action)
-    public void addTicket(Long vendorID) {
+    public void addTicket(Long vendorID,int ticketCount) {
         synchronized (this) {
             // Wait if the pool is full or all tickets are added
             while (currentPoolSize >= maxTicketCapacity || ticketsAdded >= totalTickets) {
@@ -36,19 +36,27 @@ public class TicketPool {
                 }
             }
 
-            // Increment counters and add ticket
-            ticketsAdded++;
-            String ticket = "Ticket-" + ticketsAdded;
-            ticketList.add(ticket);
-            currentPoolSize++;
-            System.out.println("Vendor " + vendorID + " added " + ticket + ". Current Pool Size: " + currentPoolSize);
+            int TicketsAdded=0;
+
+            for (int i = 0; i < ticketCount && currentPoolSize < maxTicketCapacity && ticketsAdded < totalTickets; i++) {
+                // Increment counters and add ticket
+                ticketsAdded++;
+                String ticket = "Ticket-" + ticketsAdded;
+                ticketList.add(ticket);
+                currentPoolSize++;
+                TicketsAdded++;
+
+            }
+
+
+            System.out.println("Vendor " + vendorID + " added " + ticketsAdded + " tickets. Current Pool Size: " + currentPoolSize + "/" + maxTicketCapacity);
 
             notifyAll(); // Notify consumers
         }
     }
 
     // Remove a ticket from the pool (Customer action)
-    public void removeTicket(Long customerID) {
+    public void removeTicket(Long customerID,int ticketCount) {
         synchronized (this) {
             // Wait if the pool is empty
             while (currentPoolSize <= 0) {
@@ -61,10 +69,19 @@ public class TicketPool {
                 }
             }
 
-            // Decrement pool size and retrieve a ticket
-            String ticket = ticketList.remove(0);
-            currentPoolSize--;
-            System.out.println("Customer " + customerID + " bought " + ticket + ". Current Pool Size: " + currentPoolSize);
+            List<String> ticketsBoughtList = new ArrayList<>();
+            int ticketsBought=0;
+
+            for(int i = 0; i < ticketCount && currentPoolSize > 0; i++){
+                // Decrement pool size and retrieve a ticket
+                String ticket = ticketList.remove(0);
+                currentPoolSize--;
+                ticketsBoughtList.add(ticket);
+                ticketsBought++;
+            }
+
+
+            System.out.println("Customer " + customerID + " bought " + ticketsBought + " tickets " + ticketsBoughtList + ". Current Pool Size: " + currentPoolSize);
 
             notifyAll(); // Notify vendors
         }
