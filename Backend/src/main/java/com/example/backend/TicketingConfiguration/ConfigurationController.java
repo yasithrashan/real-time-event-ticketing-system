@@ -26,29 +26,17 @@ public class ConfigurationController {
     // API to update configuration
     @PostMapping
     public ResponseEntity<String> postConfiguration(@Valid @RequestBody TicketingSystemConfiguration newConfiguration) {
-        if (newConfiguration.getMaxTicketCapacity() < newConfiguration.getTotalTickets()) {
-            return ResponseEntity.badRequest().body("Max ticket capacity cannot be less than total tickets!");
-        }
 
-//        if (newConfiguration.getMaxTicketCapacity() < 1 ||
-//                newConfiguration.getTotalTickets() < 1 ||
-//                newConfiguration.getTicketReleaseRate() < 1 ||
-//                newConfiguration.getCustomerRetrievalRate() < 1) {
-//            return ResponseEntity.badRequest().body("All configuration values must be greater than 0!");
-//        }
+        // Stop the current system
+        if (ticketingService.isRunning()) {
+            ticketingService.stopSystem();
+            System.out.println("System stopped for reconfiguration.");
+        }
 
         // Save to Files
         this.ticketingSystemConfiguration = newConfiguration;
         ConfigurationFileHandler.saveConfiguration(newConfiguration);
-
         ticketingService.initializeTicketPool(newConfiguration);
-
-        // Print the configuration parameters to the terminal
-        System.out.println("Configuration updated:");
-        System.out.println("Total Tickets: " + newConfiguration.getTotalTickets());
-        System.out.println("Ticket Release Rate: " + newConfiguration.getTicketReleaseRate());
-        System.out.println("Customer Retrieval Rate: " + newConfiguration.getCustomerRetrievalRate());
-        System.out.println("Max Ticket Capacity: " + newConfiguration.getMaxTicketCapacity());
 
         return ResponseEntity.ok("Configuration successfully updated!");
     }

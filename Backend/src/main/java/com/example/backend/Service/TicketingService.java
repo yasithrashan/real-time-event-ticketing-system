@@ -36,7 +36,7 @@ public class TicketingService {
         System.out.println("Customer Retrieval Rate: " + customerRetrievalRate);
 
         // Create the TicketPool instance with the extracted values
-        this.ticketPool = new TicketPool(maxTicketCapacity, totalTickets);
+        this.ticketPool = new TicketPool(maxTicketCapacity, totalTickets, ticketReleaseRate, customerRetrievalRate);
     }
 
     // Start the ticketing system
