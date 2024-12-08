@@ -1,0 +1,24 @@
+.title-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #f9f9f9; /* Light gray background */
+    color: #333; /* Dark text for contrast */
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    max-width: 100%;
+  }
+  
+  .title-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #007BFF; /* Soft blue for the title */
+  }
+  
+  .title-message {
+    font-size: 1.2rem;
+    margin: 0;
+    color: #555; /* Slightly lighter text for the message */
+  }
+  

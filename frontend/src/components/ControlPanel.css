@@ -1,0 +1,33 @@
+.control-panel-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px auto;
+  }
+  
+  .btn-control {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-control.start {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .btn-control.start:hover {
+    background-color: #218838;
+  }
+  
+  .btn-control.stop {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .btn-control.stop:hover {
+    background-color: #c82333;
+  }
+  

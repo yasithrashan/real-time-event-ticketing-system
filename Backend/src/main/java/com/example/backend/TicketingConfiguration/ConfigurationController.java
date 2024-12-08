@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/config")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ConfigurationController {
 
     private final TicketingService ticketingService;
@@ -21,7 +22,11 @@ public class ConfigurationController {
         if (ticketingSystemConfiguration == null) {
             this.ticketingSystemConfiguration = TicketingSystemConfiguration.getInstance(); // Default Configuration
         }
+
+        ticketingService.initializeTicketPool(ticketingSystemConfiguration);
     }
+
+
 
     // API to update configuration
     @PostMapping
