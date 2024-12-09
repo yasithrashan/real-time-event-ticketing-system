@@ -60,11 +60,13 @@ public class TicketingService {
     public synchronized void startSystem() {
         if (running) {
             System.out.println("System is already running.");
+            logStreamingController.broadcastLog("System is already running.");
             return;
         }
 
         if (ticketPool == null) {
             System.out.println("TicketPool is not initialized. Please configure the system first.");
+            logStreamingController.broadcastLog("TicketPool is not initialized. Please configure the system first.");
             return;
         }
 
@@ -72,7 +74,7 @@ public class TicketingService {
 
         // Start vendor threads
         for (long i = 1; i <= 5; i++) {
-            Vendor vendor = new Vendor(i, ticketPool, ticketReleaseRate,this);
+            Vendor vendor = new Vendor(i, ticketPool, ticketReleaseRate,this,logStreamingController);
             Thread vendorThread = new Thread(vendor);
             vendorThreads.add(vendorThread);
             vendorThread.start();
@@ -80,19 +82,21 @@ public class TicketingService {
 
         // Start customer threads
         for (long i = 1; i <= 5; i++) {
-            Customer customer = new Customer(i, ticketPool, customerRetrievalRate,this);
+            Customer customer = new Customer(i, ticketPool, customerRetrievalRate,this,logStreamingController);
             Thread customerThread = new Thread(customer);
             customerThreads.add(customerThread);
             customerThread.start();
         }
 
         System.out.println("Ticketing system started with 5 vendors and 5 customers.");
+        logStreamingController.broadcastLog("Ticketing system started.");
     }
 
     // Stop the ticketing system
     public synchronized void stopSystem() {
         if (!running) {
             System.out.println("System is not running.");
+            logStreamingController.broadcastLog("System is not running.");
             return;
         }
 
@@ -111,6 +115,7 @@ public class TicketingService {
         customerThreads.clear();
 
         System.out.println("Ticketing system stopped.");
+        logStreamingController.broadcastLog("Ticketing system stopped.");
     }
 
     // Get the current state of the system

@@ -30,7 +30,7 @@ public class TicketPool {
 
     public TicketPool(int maxTicketCapacity, int totalTickets,
                       int ticketReleaseRate, int customerRetrievalRate,LogStreamingController logStreamingController
-                      ) {
+    ) {
 
         this.maxTicketCapacity = maxTicketCapacity;
         this.totalTickets = totalTickets;
@@ -101,12 +101,12 @@ public class TicketPool {
                 }
             }
 
-                // Increment counters and add ticket
-                ticketsAdded++;
-                ticketsAddedThisSecond++;
-                String ticket = "Ticket-" + ticketsAdded;
-                ticketList.add(ticket);
-                currentPoolSize++;
+            // Increment counters and add ticket
+            ticketsAdded++;
+            ticketsAddedThisSecond++;
+            String ticket = "Ticket-" + ticketsAdded;
+            ticketList.add(ticket);
+            currentPoolSize++;
 
 
 
@@ -152,9 +152,9 @@ public class TicketPool {
                 }
             }
 
-                String ticket = ticketList.remove(0);
-                currentPoolSize--;
-                ticketsRetrievedThisSecond++;
+            String ticket = ticketList.remove(0);
+            currentPoolSize--;
+            ticketsRetrievedThisSecond++;
 
             log.info("Customer " + customerID + " bought " + ticket+ " tickets " +  ". Current Pool Size: " + currentPoolSize+ "/" + maxTicketCapacity);
             logStreamingController.broadcastLog("Customer " + customerID + " bought " + ticket + " tickets. Current Pool Size: " + currentPoolSize + "/" + maxTicketCapacity);
