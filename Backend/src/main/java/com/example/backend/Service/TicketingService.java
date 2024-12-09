@@ -1,5 +1,6 @@
 package com.example.backend.Service;
 
+import com.example.backend.FrontendService.LogStreamingController;
 import com.example.backend.TicketingConfiguration.TicketingSystemConfiguration;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,11 @@ public class TicketingService {
     private int totalTickets;
     private int ticketReleaseRate;
     private int customerRetrievalRate;
+    private final LogStreamingController logStreamingController;
+
+    public TicketingService(LogStreamingController logStreamingController) {
+        this.logStreamingController = logStreamingController;
+    }
 
 
     // Initialize the ticket pool and configuration values
@@ -47,7 +53,7 @@ public class TicketingService {
         System.out.println("Customer Retrieval Rate: " + customerRetrievalRate);
 
         // Create the TicketPool instance with the extracted values
-        this.ticketPool = new TicketPool(maxTicketCapacity, totalTickets, ticketReleaseRate, customerRetrievalRate);
+        this.ticketPool = new TicketPool(maxTicketCapacity, totalTickets, ticketReleaseRate, customerRetrievalRate, logStreamingController);
     }
 
     // Start the ticketing system
