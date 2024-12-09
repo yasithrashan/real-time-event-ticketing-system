@@ -7,12 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+
 public class TicketingService {
+
 
     private TicketPool ticketPool; // Dynamically created ticket pool
     private final List<Thread> vendorThreads = new ArrayList<>();
     private final List<Thread> customerThreads = new ArrayList<>();
-    private boolean running = false; // Tracks the system's state
+    private  static volatile boolean running = false; // Tracks the system's state
+    private volatile boolean isRunning = false; // Tracks the system's state
+
+
 
     // Service-level variables to store configuration values
     private int maxTicketCapacity;
@@ -20,13 +25,19 @@ public class TicketingService {
     private int ticketReleaseRate;
     private int customerRetrievalRate;
 
+
     // Initialize the ticket pool and configuration values
     public void initializeTicketPool(TicketingSystemConfiguration config) {
+
+        
+
         // Extract and assign values from the configuration
         this.maxTicketCapacity = config.getMaxTicketCapacity();
         this.totalTickets = config.getTotalTickets();
         this.ticketReleaseRate = config.getTicketReleaseRate();
         this.customerRetrievalRate = config.getCustomerRetrievalRate();
+
+
 
         // Log the initialized values
         System.out.println("Initializing TicketPool with:");
@@ -55,7 +66,7 @@ public class TicketingService {
 
         // Start vendor threads
         for (long i = 1; i <= 5; i++) {
-            Vendor vendor = new Vendor(i, ticketPool, ticketReleaseRate);
+            Vendor vendor = new Vendor(i, ticketPool, ticketReleaseRate,this);
             Thread vendorThread = new Thread(vendor);
             vendorThreads.add(vendorThread);
             vendorThread.start();
@@ -63,7 +74,7 @@ public class TicketingService {
 
         // Start customer threads
         for (long i = 1; i <= 5; i++) {
-            Customer customer = new Customer(i, ticketPool, customerRetrievalRate);
+            Customer customer = new Customer(i, ticketPool, customerRetrievalRate,this);
             Thread customerThread = new Thread(customer);
             customerThreads.add(customerThread);
             customerThread.start();
@@ -97,7 +108,7 @@ public class TicketingService {
     }
 
     // Get the current state of the system
-    public boolean isRunning() {
+    public static boolean isRunning() {
         return running;
     }
 }

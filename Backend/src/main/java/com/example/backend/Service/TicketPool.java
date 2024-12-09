@@ -1,8 +1,12 @@
 package com.example.backend.Service;
 
+
+import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+@Slf4j
 
 public class TicketPool {
 
@@ -18,12 +22,15 @@ public class TicketPool {
     private final int customerRetrievalRate; // Maximum tickets all customers can retrieve per second
 
 
+
     // Constructor initializes from configuration
-    public TicketPool(int maxTicketCapacity, int totalTickets,int ticketReleaseRate,int customerRetrievalRate) {
+
+    public TicketPool(int maxTicketCapacity, int totalTickets, int ticketReleaseRate, int customerRetrievalRate) {
         this.maxTicketCapacity = maxTicketCapacity;
         this.totalTickets = totalTickets;
         this.ticketReleaseRate = ticketReleaseRate;
         this.customerRetrievalRate = customerRetrievalRate;
+
         // start a thread to reset
 
         startResetThread();
@@ -57,20 +64,29 @@ public class TicketPool {
             // Wait if the pool is full or all tickets are added
             while (currentPoolSize >= maxTicketCapacity ||
                     ticketsAdded >= totalTickets || ticketsAddedThisSecond >= ticketReleaseRate) {
+                if(!TicketingService.isRunning()) return;
                 if(isFinished)return; // Stop if the process is complete
                 try {
+
                     if (ticketsAdded >= totalTickets) {
-                        System.out.println("All tickets have been added. Vendor " + vendorID + " is waiting...");
+                        log.info("All tickets have been added. Vendor " + vendorID + " is waiting...");
+
                     } else if (ticketsAddedThisSecond >= ticketReleaseRate) {
-                        System.out.println("Ticket release limit reached. Vendor " + vendorID + " is waiting...");
+                        log.info("Ticket release limit reached. Vendor " + vendorID + " is waiting...");
+
+
                     } else {
-                        System.out.println("Ticket Pool is full. Vendor " + vendorID + " is waiting...");
+                        log.info("Ticket Pool is full. Vendor " + vendorID + " is waiting...");
+
                     }
+
                     wait();
 
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    System.out.println("Vendor " + vendorID + " thread interrupted.");
+                    log.info("Vendor " + vendorID + " thread interrupted.");
+
+
                 }
             }
 
@@ -83,7 +99,8 @@ public class TicketPool {
 
 
 
-            System.out.println("Vendor " + vendorID + " added " +ticket+ " tickets. Current Pool Size: " + currentPoolSize + "/" + maxTicketCapacity);
+            log.info("Vendor " + vendorID + " added " +ticket+ " tickets. Current Pool Size: " + currentPoolSize + "/" + maxTicketCapacity);
+
 
             if (ticketsAdded >= totalTickets) {
                 isFinished = true;
@@ -98,19 +115,24 @@ public class TicketPool {
         synchronized (this) {
             // Wait if the pool is empty
             while (currentPoolSize <= 0 || ticketsRetrievedThisSecond >= customerRetrievalRate) {
+                if(!TicketingService.isRunning()) return;
                 try {
                     if(isFinished)return;
                     if(currentPoolSize <=0) {
-                        System.out.println("Ticket Pool is empty. Customer " + customerID + " is waiting...");
+                        log.info("Ticket Pool is empty. Customer " + customerID + " is waiting...");
+
                     } else if (ticketsRetrievedThisSecond >= ticketReleaseRate) {
-                        System.out.println("Ticket release limit reached. Vendor " + customerID + " is waiting...");
+                        log.info("Ticket release limit reached. Vendor " + customerID + " is waiting...");
+
                     }
 
                     wait();
 
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    System.out.println("Customer " + customerID + " thread interrupted.");
+                    log.info("Customer " + customerID + " thread interrupted.");
+
+
                 }
             }
 
@@ -118,7 +140,8 @@ public class TicketPool {
                 currentPoolSize--;
                 ticketsRetrievedThisSecond++;
 
-            System.out.println("Customer " + customerID + " bought " + ticket+ " tickets " +  ". Current Pool Size: " + currentPoolSize+ "/" + maxTicketCapacity);
+            log.info("Customer " + customerID + " bought " + ticket+ " tickets " +  ". Current Pool Size: " + currentPoolSize+ "/" + maxTicketCapacity);
+
 
             if (ticketsAdded >= totalTickets && currentPoolSize <= 0) {
                 isFinished = true;

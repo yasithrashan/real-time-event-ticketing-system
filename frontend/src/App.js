@@ -1,6 +1,7 @@
 import './App.css';
 import ConfigurationForm from './components/ConfigurationForm';
 import ControlPanel from './components/ControlPanel';
+import LogDisplay from './components/LogDisplay';
 import TicketDisplay from './components/TicketDisplay';
 import Title from './components/Title';
 
@@ -14,6 +15,7 @@ function App() {
       <ConfigurationForm/>
       <ControlPanel/>
       <TicketDisplay/>
+      <LogDisplay/>
       
     </div>
   );
