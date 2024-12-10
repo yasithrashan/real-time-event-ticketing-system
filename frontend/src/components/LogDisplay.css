@@ -1,5 +1,5 @@
 .log-display {
-    background-color: #ffffff; /* White background */
+  background: rgba(255, 255, 255, 0.4); /* White background */
     color: #333; /* Dark text */
     padding: 20px;
     margin: 20px auto;

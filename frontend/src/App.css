@@ -4,7 +4,10 @@ body {
     font-family: 'Poppins', sans-serif;
     position: relative;
     overflow: hidden;
+    background: linear-gradient(0deg, rgba(189, 224, 224, 1) 0%, rgba(71, 137, 232, 1) 100%)
     
     
 
   }
+
+ 
