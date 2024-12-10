@@ -1,6 +1,6 @@
 package com.example.backend.Service;
 
-import com.example.backend.FrontendService.LogStreamingController;
+import com.example.backend.FrontendService.LogService;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -12,18 +12,18 @@ public class Vendor implements Runnable {
     private final Long vendorID;
     private final int ticketReleaseRate; // Tickets added per second
     private final TicketingService ticketingService;
-    private final LogStreamingController logStreamingController;
+    private final LogService logService;
 
 
 
 
     // Constructor
-    public Vendor(Long vendorID, TicketPool ticketPool, int ticketReleaseRate, TicketingService ticketingService, LogStreamingController logStreamingController) {
+    public Vendor(Long vendorID, TicketPool ticketPool, int ticketReleaseRate, TicketingService ticketingService, LogService logService) {
         this.vendorID = vendorID;
         this.ticketPool = ticketPool;
         this.ticketReleaseRate = ticketReleaseRate; // Dynamically passed
         this.ticketingService = ticketingService;
-        this.logStreamingController = logStreamingController;
+        this.logService = logService;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class Vendor implements Runnable {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 log.info("Vendor " + vendorID + " stopped.");
-                logStreamingController.broadcastLog("Vendor " + vendorID + " stopped.");
+                logService.addLog("Vendor " + vendorID + " stopped.");
 
                 break;
             }

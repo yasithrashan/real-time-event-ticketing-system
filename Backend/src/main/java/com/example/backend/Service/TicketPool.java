@@ -1,7 +1,7 @@
 package com.example.backend.Service;
 
 
-import com.example.backend.FrontendService.LogStreamingController;
+import com.example.backend.FrontendService.LogService;
 import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,9 @@ import java.util.List;
 
 public class TicketPool {
 
-    private final LogStreamingController logStreamingController;
+//    private final LogStreamingController logStreamingController;
+
+    private final LogService logService;
 
     private int currentPoolSize = 0; // Tracks the current size of the ticket pool
     private final int maxTicketCapacity; // Maximum tickets allowed in the pool
@@ -29,14 +31,14 @@ public class TicketPool {
     // Constructor initializes from configuration
 
     public TicketPool(int maxTicketCapacity, int totalTickets,
-                      int ticketReleaseRate, int customerRetrievalRate,LogStreamingController logStreamingController
+                      int ticketReleaseRate, int customerRetrievalRate, LogService logService
     ) {
 
         this.maxTicketCapacity = maxTicketCapacity;
         this.totalTickets = totalTickets;
         this.ticketReleaseRate = ticketReleaseRate;
         this.customerRetrievalRate = customerRetrievalRate;
-        this.logStreamingController = logStreamingController;
+        this.logService = logService;
 
         // start a thread to reset
 
@@ -77,7 +79,7 @@ public class TicketPool {
 
                     if (ticketsAdded >= totalTickets) {
                         log.info("All tickets have been added. Vendor " + vendorID + " is waiting...");
-                        logStreamingController.broadcastLog("All tickets have been added. Vendor " + vendorID + " is waiting...");
+                        logService.addLog("All tickets have been added. Vendor " + vendorID + " is waiting...");
 
                     } else if (ticketsAddedThisSecond >= ticketReleaseRate) {
                         log.info("Ticket release limit reached. Vendor " + vendorID + " is waiting...");
@@ -86,7 +88,7 @@ public class TicketPool {
 
                     } else {
                         log.info("Ticket Pool is full. Vendor " + vendorID + " is waiting...");
-                        logStreamingController.broadcastLog("Ticket Pool is full. Vendor " + vendorID + " is waiting...");
+                        logService.addLog("Ticket Pool is full. Vendor " + vendorID + " is waiting...");
 
                     }
 
@@ -95,7 +97,7 @@ public class TicketPool {
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     log.info("Vendor " + vendorID + " thread interrupted.");
-                    logStreamingController.broadcastLog("Vendor " + vendorID + " thread interrupted.");
+                    logService.addLog("Vendor " + vendorID + " thread interrupted.");
 
 
                 }
@@ -111,7 +113,7 @@ public class TicketPool {
 
 
             log.info("Vendor " + vendorID + " added " +ticket+ " tickets. Current Pool Size: " + currentPoolSize + "/" + maxTicketCapacity);
-            logStreamingController.broadcastLog("Vendor " + vendorID + " added " + ticket + " tickets. Current Pool Size: " + currentPoolSize + "/" + maxTicketCapacity);
+            logService.addLog("Vendor " + vendorID + " added " + ticket + " tickets. Current Pool Size: " + currentPoolSize + "/" + maxTicketCapacity);
 
 
             if (ticketsAdded >= totalTickets) {
@@ -132,11 +134,11 @@ public class TicketPool {
                     if(isFinished)return;
                     if(currentPoolSize <=0) {
                         log.info("Ticket Pool is empty. Customer " + customerID + " is waiting...");
-                        logStreamingController.broadcastLog("Ticket Pool is empty. Customer " + customerID + " is waiting...");
+                        logService.addLog("Ticket Pool is empty. Customer " + customerID + " is waiting...");
 
                     } else if (ticketsRetrievedThisSecond >= ticketReleaseRate) {
                         log.info("Ticket release limit reached. Vendor " + customerID + " is waiting...");
-                        logStreamingController.broadcastLog("Ticket release limit reached. Vendor " + customerID + " is waiting...");
+                        logService.addLog("Ticket release limit reached. Vendor " + customerID + " is waiting...");
 
 
                     }
@@ -146,7 +148,7 @@ public class TicketPool {
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     log.info("Customer " + customerID + " thread interrupted.");
-                    logStreamingController.broadcastLog("Customer " + customerID + " thread interrupted.");
+                    logService.addLog("Customer " + customerID + " thread interrupted.");
 
 
                 }
@@ -157,7 +159,7 @@ public class TicketPool {
             ticketsRetrievedThisSecond++;
 
             log.info("Customer " + customerID + " bought " + ticket+ " tickets " +  ". Current Pool Size: " + currentPoolSize+ "/" + maxTicketCapacity);
-            logStreamingController.broadcastLog("Customer " + customerID + " bought " + ticket + " tickets. Current Pool Size: " + currentPoolSize + "/" + maxTicketCapacity);
+            logService.addLog("Customer " + customerID + " bought " + ticket + " tickets. Current Pool Size: " + currentPoolSize + "/" + maxTicketCapacity);
 
 
 

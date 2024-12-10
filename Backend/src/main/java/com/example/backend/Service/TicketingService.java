@@ -1,6 +1,6 @@
 package com.example.backend.Service;
 
-import com.example.backend.FrontendService.LogStreamingController;
+import com.example.backend.FrontendService.LogService;
 import com.example.backend.TicketingConfiguration.TicketingSystemConfiguration;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +25,10 @@ public class TicketingService {
     private int totalTickets;
     private int ticketReleaseRate;
     private int customerRetrievalRate;
-    private final LogStreamingController logStreamingController;
+    private final LogService logService;
 
-    public TicketingService(LogStreamingController logStreamingController) {
-        this.logStreamingController = logStreamingController;
+    public TicketingService(LogService logService) {
+        this.logService = logService;
     }
 
 
@@ -53,20 +53,20 @@ public class TicketingService {
         System.out.println("Customer Retrieval Rate: " + customerRetrievalRate);
 
         // Create the TicketPool instance with the extracted values
-        this.ticketPool = new TicketPool(maxTicketCapacity, totalTickets, ticketReleaseRate, customerRetrievalRate, logStreamingController);
+        this.ticketPool = new TicketPool(maxTicketCapacity, totalTickets, ticketReleaseRate, customerRetrievalRate, logService);
     }
 
     // Start the ticketing system
     public synchronized void startSystem() {
         if (running) {
             System.out.println("System is already running.");
-            logStreamingController.broadcastLog("System is already running.");
+            logService.addLog("System is already running.");
             return;
         }
 
         if (ticketPool == null) {
             System.out.println("TicketPool is not initialized. Please configure the system first.");
-            logStreamingController.broadcastLog("TicketPool is not initialized. Please configure the system first.");
+            logService.addLog("TicketPool is not initialized. Please configure the system first.");
             return;
         }
 
@@ -74,7 +74,7 @@ public class TicketingService {
 
         // Start vendor threads
         for (long i = 1; i <= 5; i++) {
-            Vendor vendor = new Vendor(i, ticketPool, ticketReleaseRate,this,logStreamingController);
+            Vendor vendor = new Vendor(i, ticketPool, ticketReleaseRate,this,logService);
             Thread vendorThread = new Thread(vendor);
             vendorThreads.add(vendorThread);
             vendorThread.start();
@@ -82,21 +82,21 @@ public class TicketingService {
 
         // Start customer threads
         for (long i = 1; i <= 5; i++) {
-            Customer customer = new Customer(i, ticketPool, customerRetrievalRate,this,logStreamingController);
+            Customer customer = new Customer(i, ticketPool, customerRetrievalRate,this,logService);
             Thread customerThread = new Thread(customer);
             customerThreads.add(customerThread);
             customerThread.start();
         }
 
         System.out.println("Ticketing system started with 5 vendors and 5 customers.");
-        logStreamingController.broadcastLog("Ticketing system started.");
+        logService.addLog("Ticketing system started.");
     }
 
     // Stop the ticketing system
     public synchronized void stopSystem() {
         if (!running) {
             System.out.println("System is not running.");
-            logStreamingController.broadcastLog("System is not running.");
+            logService.addLog("System is not running.");
             return;
         }
 
@@ -115,7 +115,7 @@ public class TicketingService {
         customerThreads.clear();
 
         System.out.println("Ticketing system stopped.");
-        logStreamingController.broadcastLog("Ticketing system stopped.");
+        logService.addLog("Ticketing system stopped.");
     }
 
     // Get the current state of the system
