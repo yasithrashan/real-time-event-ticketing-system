@@ -6,48 +6,20 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        boolean isStarting = false;
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Welcome to the Ticketing System Application!");
 
-        while(!isStarting) {
-            System.out.println("....Main Menu....");
-            System.out.println("Press 1 to Start the System");
-            System.out.println("Press 2 to Stop the System");
-            System.out.println("Press 3 to Update Configuration");
-            System.out.println("Press 4 to Retrieve Configuration");
-            System.out.println("Press 5 to Exit\n");
-            System.out.println("Please choose one of the following options:");
-            int option = scanner.nextInt();
-            switch (option) {
-                case 1:
-                    startSystem();
-                    break;
-                case 2:
-                    stopSystem();
-                    break;
-                case 3:
-                    updateConfiguration();
-                    break;
-                case 4:
-                    retrieveConfiguration();
-                    break;
-                case 5:
-                    System.out.println("Exiting the system...");
-                    isStarting = true;
-                    break;
-                default:
-                    System.out.println("Invalid option. Please try again.");
-            }
-        }
-
+        mainMenu();
     }
 
     public static void startSystem() {
         System.out.println("Starting the system");
+        TicketingService ticketingService = new TicketingService();
+        ticketingService.startSystem();
     }
 
     public static void stopSystem() {
+        System.out.println("Stopping the system");
+        TicketingService ticketingService = new TicketingService();
+        ticketingService.stopSystem();
     }
 
     public static void updateConfiguration() {
@@ -116,6 +88,44 @@ public class Main {
             System.out.println("Configuration saved successfully to " + filePath);
         } catch (IOException e) {
             System.out.println("An error occurred while saving the configuration: " + e.getMessage());
+        }
+
+    }
+
+    public static void mainMenu(){
+        boolean isStarting = false;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome to the Ticketing System Application!");
+
+        while(!isStarting) {
+            System.out.println("....Main Menu....");
+            System.out.println("Press 1 to Start the System");
+            System.out.println("Press 2 to Stop the System");
+            System.out.println("Press 3 to Update Configuration");
+            System.out.println("Press 4 to Retrieve Configuration");
+            System.out.println("Press 5 to Exit\n");
+            System.out.println("Please choose one of the following options:");
+            int option = scanner.nextInt();
+            switch (option) {
+                case 1:
+                    startSystem();
+                    break;
+                case 2:
+                    stopSystem();
+                    break;
+                case 3:
+                    updateConfiguration();
+                    break;
+                case 4:
+                    retrieveConfiguration();
+                    break;
+                case 5:
+                    System.out.println("Exiting the system...");
+                    isStarting = true;
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
         }
 
     }
