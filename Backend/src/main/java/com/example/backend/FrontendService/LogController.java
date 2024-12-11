@@ -12,18 +12,30 @@ public class LogController {
 
     private final LogService logService;
 
+    /**
+     * Define Log
+     * @param logService
+     */
     public LogController(LogService logService) {
         this.logService = logService;
     }
 
     // Endpoint to fetch logs
+
+    /**
+     * Get the logs
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<String>> getLogs() {
         List<String> logs = logService.getLogs();
         return ResponseEntity.ok(logs);
     }
 
-    // Optional: Endpoint to clear logs
+    /**
+     * Clear the logs
+     * @return
+     */
     @PostMapping("/clear")
     public ResponseEntity<String> clearLogs() {
         logService.clearLogs();

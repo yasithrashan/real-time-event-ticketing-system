@@ -3,13 +3,9 @@ package com.example.backend.TicketingConfiguration;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
-
 
 @Getter
 @Setter
-
-
 public class TicketingSystemConfiguration {
 
 
@@ -29,11 +25,16 @@ public class TicketingSystemConfiguration {
     // Singleton instance
     private static TicketingSystemConfiguration instance;
 
-    // Private constructor to prevent direct instantiation
+    /**
+     * Private Constructor
+     */
     private TicketingSystemConfiguration() {
     }
 
-    // Static method to get the single instance
+    /**
+     * Static method for return Configuration Instance
+     * @return
+     */
     public static synchronized TicketingSystemConfiguration getInstance() {
         if (instance == null) {
             instance = new TicketingSystemConfiguration();

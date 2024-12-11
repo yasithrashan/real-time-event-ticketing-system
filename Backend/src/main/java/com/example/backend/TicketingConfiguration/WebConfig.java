@@ -7,6 +7,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig {
+    /**
+     * Allowed accessed to the frontend
+     * @return null
+     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -18,7 +22,6 @@ public class WebConfig {
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
-
         };
     }
 

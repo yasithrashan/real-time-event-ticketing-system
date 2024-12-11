@@ -12,9 +12,12 @@ import java.util.List;
 public class LogService {
     private final List<String> logs = Collections.synchronizedList(new LinkedList<>());
 
+    /**
+     * Get Logs
+     * Only 1000 logs allowed
+     * @param log
+     */
     public void addLog(String log) {
-
-
         logs.add(log);
         // Limit the size of logs to avoid memory overflow
         if (logs.size() > 1000) {
@@ -23,11 +26,17 @@ public class LogService {
 
     }
 
+    /**
+     * Get the logs
+     * @return
+     */
     public List<String> getLogs() {
         return new LinkedList<>(logs);
     }
 
-
+    /**
+     * Clear the Logs
+     */
     public void clearLogs() {
         logs.clear();
     }
