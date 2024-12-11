@@ -1,80 +1,74 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-
         mainMenu();
     }
 
     public static void startSystem() {
-        System.out.println("Starting the system");
-        TicketingService ticketingService = new TicketingService();
-        ticketingService.startSystem();
+        try {
+            System.out.println("Starting the system");
+            TicketingService ticketingService = new TicketingService();
+            ticketingService.startSystem();
+        } catch (Exception e) {
+            System.out.println("An error occurred while starting the system: " + e.getMessage());
+        }
     }
 
     public static void stopSystem() {
-        System.out.println("Stopping the system");
-        TicketingService ticketingService = new TicketingService();
-        ticketingService.stopSystem();
+        try {
+            System.out.println("Stopping the system");
+            TicketingService ticketingService = new TicketingService();
+            ticketingService.stopSystem();
+        } catch (Exception e) {
+            System.out.println("An error occurred while stopping the system: " + e.getMessage());
+        }
     }
 
     public static void updateConfiguration() {
         Configuration configuration = Configuration.getInstance();
-        System.out.println("Updating Configuration:");
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Total Number of Tickets: ");
 
-        int totalTickets;
-        for(totalTickets = scanner.nextInt(); totalTickets <= 0; totalTickets = scanner.nextInt()) {
-            System.out.println("Invalid input. Please enter a positive number.");
-            System.out.print("Enter Total Number of Tickets (positive number): ");
+        try {
+            System.out.println("Updating Configuration:");
+
+            int totalTickets = getPositiveInput(scanner, "Enter Total Number of Tickets: ");
+            int ticketReleaseRate = getPositiveInput(scanner, "Enter Ticket Release Rate: ");
+            int customerRetrievalRate = getPositiveInput(scanner, "Enter Customer Retrieval Rate: ");
+            int maxTicketCapacity = getPositiveInput(scanner, "Enter Maximum Ticket Capacity: ");
+
+            configuration.setTotalTickets(totalTickets);
+            configuration.setTicketReleaseRate(ticketReleaseRate);
+            configuration.setCustomerRetrievalRate(customerRetrievalRate);
+            configuration.setMaxTicketCapacity(maxTicketCapacity);
+
+            saveConfigurationToFile(configuration);
+            System.out.println("Configuration saved to file.");
+
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter numeric values.");
+            scanner.nextLine(); // Clear invalid input
+        } catch (Exception e) {
+            System.out.println("An error occurred while updating configuration: " + e.getMessage());
         }
-
-        System.out.print("Enter Ticket Release Rate: ");
-
-        int ticketReleaseRate;
-        for(ticketReleaseRate = scanner.nextInt(); ticketReleaseRate <= 0; ticketReleaseRate = scanner.nextInt()) {
-            System.out.println("Invalid input. Please enter a positive number.");
-            System.out.print("Enter Ticket Release Rate (positive number): ");
-        }
-
-        System.out.print("Enter Customer Retrieval Rate: ");
-
-        int customerRetrievalRate;
-        for(customerRetrievalRate = scanner.nextInt(); customerRetrievalRate <= 0; customerRetrievalRate = scanner.nextInt()) {
-            System.out.println("Invalid input. Please enter a positive number.");
-            System.out.print("Enter Customer Retrieval Rate (positive number): ");
-        }
-
-        System.out.print("Enter Maximum Ticket Capacity: ");
-
-        int maxTicketCapacity;
-        for(maxTicketCapacity = scanner.nextInt(); maxTicketCapacity <= 0; maxTicketCapacity = scanner.nextInt()) {
-            System.out.println("Invalid input. Please enter a positive number.");
-            System.out.print("Enter Maximum Ticket Capacity (positive number): ");
-        }
-
-        configuration.setTotalTickets(totalTickets);
-        configuration.setTicketReleaseRate(ticketReleaseRate);
-        configuration.setCustomerRetrievalRate(customerRetrievalRate);
-        configuration.setMaxTicketCapacity(maxTicketCapacity);
-        saveConfigurationToFile(configuration);
-        System.out.println("Configuration saved to file.");
     }
 
     public static void retrieveConfiguration() {
-        System.out.println("Retrieving Configuration:");
-        System.out.println("Total Tickets : " + Configuration.getInstance().getTotalTickets());
-        System.out.println("Ticket Release Rate : " + Configuration.getInstance().getTicketReleaseRate());
-        System.out.println("Customer Retrieval Rate : " + Configuration.getInstance().getCustomerRetrievalRate());
-        System.out.println("Maximum Ticket Capacity : " + Configuration.getInstance().getMaxTicketCapacity());
-    }
-
-    public static void exit() {
+        try {
+            System.out.println("Retrieving Configuration:");
+            Configuration configuration = Configuration.getInstance();
+            System.out.println("Total Tickets : " + configuration.getTotalTickets());
+            System.out.println("Ticket Release Rate : " + configuration.getTicketReleaseRate());
+            System.out.println("Customer Retrieval Rate : " + configuration.getCustomerRetrievalRate());
+            System.out.println("Maximum Ticket Capacity : " + configuration.getMaxTicketCapacity());
+        } catch (Exception e) {
+            System.out.println("An error occurred while retrieving configuration: " + e.getMessage());
+        }
     }
 
     public static void saveConfigurationToFile(Configuration configuration) {
@@ -89,44 +83,72 @@ public class Main {
         } catch (IOException e) {
             System.out.println("An error occurred while saving the configuration: " + e.getMessage());
         }
-
     }
 
-    public static void mainMenu(){
-        boolean isStarting = false;
+    public static void mainMenu() {
+        boolean isRunning = true;
         Scanner scanner = new Scanner(System.in);
+
         System.out.println("Welcome to the Ticketing System Application!");
 
-        while(!isStarting) {
-            System.out.println("....Main Menu....");
-            System.out.println("Press 1 to Start the System");
-            System.out.println("Press 2 to Stop the System");
-            System.out.println("Press 3 to Update Configuration");
-            System.out.println("Press 4 to Retrieve Configuration");
-            System.out.println("Press 5 to Exit\n");
-            System.out.println("Please choose one of the following options:");
-            int option = scanner.nextInt();
-            switch (option) {
-                case 1:
-                    startSystem();
-                    break;
-                case 2:
-                    stopSystem();
-                    break;
-                case 3:
-                    updateConfiguration();
-                    break;
-                case 4:
-                    retrieveConfiguration();
-                    break;
-                case 5:
-                    System.out.println("Exiting the system...");
-                    isStarting = true;
-                    break;
-                default:
-                    System.out.println("Invalid option. Please try again.");
+        while (isRunning) {
+            try {
+                System.out.println("....Main Menu....");
+                System.out.println("1. Start the System");
+                System.out.println("2. Stop the System");
+                System.out.println("3. Update Configuration");
+                System.out.println("4. Retrieve Configuration");
+                System.out.println("5. Exit");
+                System.out.print("Please choose one of the following options: ");
+
+                int option = scanner.nextInt();
+
+                switch (option) {
+                    case 1:
+                        startSystem();
+                        break;
+                    case 2:
+                        stopSystem();
+                        break;
+                    case 3:
+                        updateConfiguration();
+                        break;
+                    case 4:
+                        retrieveConfiguration();
+                        break;
+                    case 5:
+                        System.out.println("Exiting the system...");
+                        isRunning = false;
+                        break;
+                    default:
+                        System.out.println("Invalid option. Please try again.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 5.");
+                scanner.nextLine(); // Clear invalid input
             }
         }
 
+        scanner.close();
+    }
+
+    private static int getPositiveInput(Scanner scanner, String prompt) {
+        int input = -1;
+
+        while (input <= 0) {
+            try {
+                System.out.print(prompt);
+                input = scanner.nextInt();
+
+                if (input <= 0) {
+                    System.out.println("Invalid input. Please enter a positive number.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a numeric value.");
+                scanner.nextLine(); // Clear invalid input
+            }
+        }
+
+        return input;
     }
 }

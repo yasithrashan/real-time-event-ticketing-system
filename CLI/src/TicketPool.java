@@ -26,7 +26,6 @@ public class TicketPool {
                     if (ticketsAdded >= configuration.getTotalTickets()) {
                         System.out.println("All tickets have been added. Vendor " + vendorID + " is waiting...");
 
-
                     } else {
                         System.out.println("Ticket Pool is full. Vendor " + vendorID + " is waiting...");
 

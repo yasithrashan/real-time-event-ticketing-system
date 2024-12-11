@@ -1,30 +1,27 @@
 public class Configuration {
+    private static Configuration instance;
     private int totalTickets;
     private int ticketReleaseRate;
     private int customerRetrievalRate;
     private int maxTicketCapacity;
-    private static Configuration instance;
 
-    public Configuration(int totalTickets, int ticketReleaseRate, int customerRetrievalRate, int maxTicketCapacity) {
-        this.totalTickets = totalTickets;
-        this.ticketReleaseRate = ticketReleaseRate;
-        this.customerRetrievalRate = customerRetrievalRate;
-        this.maxTicketCapacity = maxTicketCapacity;
-    }
-
-    private Configuration() {
-    }
-
+    // Singleton instance
     public static Configuration getInstance() {
         if (instance == null) {
             instance = new Configuration();
         }
-
         return instance;
     }
 
+    // Add validation method
+    public boolean isValid() {
+        return totalTickets > 0 && ticketReleaseRate > 0 &&
+                customerRetrievalRate > 0 && maxTicketCapacity > 0;
+    }
+
+    // Getters and setters for configuration properties
     public int getTotalTickets() {
-        return this.totalTickets;
+        return totalTickets;
     }
 
     public void setTotalTickets(int totalTickets) {
@@ -32,7 +29,7 @@ public class Configuration {
     }
 
     public int getTicketReleaseRate() {
-        return this.ticketReleaseRate;
+        return ticketReleaseRate;
     }
 
     public void setTicketReleaseRate(int ticketReleaseRate) {
@@ -40,7 +37,7 @@ public class Configuration {
     }
 
     public int getCustomerRetrievalRate() {
-        return this.customerRetrievalRate;
+        return customerRetrievalRate;
     }
 
     public void setCustomerRetrievalRate(int customerRetrievalRate) {
@@ -48,7 +45,7 @@ public class Configuration {
     }
 
     public int getMaxTicketCapacity() {
-        return this.maxTicketCapacity;
+        return maxTicketCapacity;
     }
 
     public void setMaxTicketCapacity(int maxTicketCapacity) {
