@@ -1,12 +1,12 @@
 .log-display {
-  background: rgba(255, 255, 255, 0.4); /* White background */
-    color: #333; /* Dark text */
+  background: rgba(255, 255, 255, 0.4); 
+    color: #333; 
     padding: 20px;
     margin: 20px auto;
     max-width: 600px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    border: 1px solid #ddd; /* Light border */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    border: 1px solid #ddd;
     
   }
   
@@ -18,16 +18,16 @@
   }
   
   .log-container {
-    max-height: 300px; /* Limit height to make it scrollable */
-    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 300px; 
+    overflow-y: auto; 
     border: 1px solid #ccc;
     border-radius: 6px;
-    background-color: #f9f9f9; /* Light grey background for logs */
+    background-color: #f9f9f9; 
     padding: 10px;
   }
   
   .log-list {
-    list-style-type: none; /* Remove bullets */
+    list-style-type: none; 
     padding: 0;
     margin: 0;
   }
@@ -35,14 +35,14 @@
   .log-list li {
     padding: 10px;
     margin-bottom: 8px;
-    background-color: #ffffff; /* White background for log items */
+    background-color: #ffffff; 
     border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for log items */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     font-size: 0.9rem;
     color: #444;
   }
   
   .log-list li:nth-child(odd) {
-    background-color: #f0f8ff; /* Slightly blue background for alternate rows */
+    background-color: #f0f8ff; 
   }
   
