@@ -83,7 +83,7 @@ public class TicketPool {
 
                     } else if (ticketsAddedThisSecond >= ticketReleaseRate) {
                         log.info("Ticket release limit reached. Vendor " + vendorID + " is waiting...");
-                        log.info("Ticket release limit reached. Vendor " + vendorID + " is waiting...");
+                        logService.addLog("Ticket release limit reached. Vendor " + vendorID + " is waiting...");
 
 
                     } else {
