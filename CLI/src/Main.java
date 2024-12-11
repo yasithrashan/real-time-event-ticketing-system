@@ -7,14 +7,17 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        mainMenu();
+        mainMenu(); // Call the main method
     }
 
+    /**
+     * Start the Ticketing system
+     */
     public static void startSystem() {
         try {
             System.out.println("Starting the system");
             TicketingService ticketingService = new TicketingService();
-            ticketingService.startSystem();
+            ticketingService.startSystem(); // start the system
         } catch (Exception e) {
             System.out.println("An error occurred while starting the system: " + e.getMessage());
         }
@@ -24,12 +27,15 @@ public class Main {
         try {
             System.out.println("Stopping the system");
             TicketingService ticketingService = new TicketingService();
-            ticketingService.stopSystem();
+            ticketingService.stopSystem(); // stop the system
         } catch (Exception e) {
             System.out.println("An error occurred while stopping the system: " + e.getMessage());
         }
     }
 
+    /**
+     * Update configuration
+     */
     public static void updateConfiguration() {
         Configuration configuration = Configuration.getInstance();
         Scanner scanner = new Scanner(System.in);
@@ -37,6 +43,7 @@ public class Main {
         try {
             System.out.println("Updating Configuration:");
 
+            // Get user positive inputs
             int totalTickets = getPositiveInput(scanner, "Enter Total Number of Tickets: ");
             int ticketReleaseRate = getPositiveInput(scanner, "Enter Ticket Release Rate: ");
             int customerRetrievalRate = getPositiveInput(scanner, "Enter Customer Retrieval Rate: ");
@@ -47,6 +54,7 @@ public class Main {
             configuration.setCustomerRetrievalRate(customerRetrievalRate);
             configuration.setMaxTicketCapacity(maxTicketCapacity);
 
+            // Configuration saved to the txt file
             saveConfigurationToFile(configuration);
             System.out.println("Configuration saved to file.");
 
@@ -58,6 +66,10 @@ public class Main {
         }
     }
 
+    /**
+     * Retrieve ticketing parameters
+     * using singleton instance
+     */
     public static void retrieveConfiguration() {
         try {
             System.out.println("Retrieving Configuration:");
@@ -71,6 +83,11 @@ public class Main {
         }
     }
 
+    /**
+     * Create a method to save configuration to txt file
+     * Buffered writer
+     * @param configuration
+     */
     public static void saveConfigurationToFile(Configuration configuration) {
         String filePath = "Configuration.txt";
 
@@ -85,6 +102,9 @@ public class Main {
         }
     }
 
+    /**
+     * Main Menu method
+     */
     public static void mainMenu() {
         boolean isRunning = true;
         Scanner scanner = new Scanner(System.in);
@@ -93,13 +113,13 @@ public class Main {
 
         while (isRunning) {
             try {
-                System.out.println("....Main Menu....");
+                System.out.println("\n....Main Menu...");
                 System.out.println("1. Start the System");
                 System.out.println("2. Stop the System");
                 System.out.println("3. Update Configuration");
                 System.out.println("4. Retrieve Configuration");
-                System.out.println("5. Exit");
-                System.out.print("Please choose one of the following options: ");
+                System.out.println("5. Exit\n");
+                System.out.print("Please choose one of the following options: \n");
 
                 int option = scanner.nextInt();
 
@@ -129,9 +149,16 @@ public class Main {
             }
         }
 
-        scanner.close();
+        scanner.close(); // close the scanner object
     }
 
+    /**
+     * Create a method for get positive values
+     * using scanner
+     * @param scanner
+     * @param prompt
+     * @return input
+     */
     private static int getPositiveInput(Scanner scanner, String prompt) {
         int input = -1;
 
@@ -148,7 +175,6 @@ public class Main {
                 scanner.nextLine(); // Clear invalid input
             }
         }
-
         return input;
     }
 }
