@@ -16,7 +16,7 @@ Before running the application, ensure you have the following installed:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yasithrashan2003/Real-Time-Event-Ticketing-System.git
+   git clone https://github.com/yasithrashan/real-time-event-ticketing-system.git
    ```
 
 2. **Run the Spring Boot Backend**
